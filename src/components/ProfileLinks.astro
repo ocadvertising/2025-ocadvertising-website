@@ -1,0 +1,86 @@
+---
+const { website, linkedin, instagram, tiktok, youtube, color } = Astro.props;
+
+// Normalize to arrays
+const websites = Array.isArray(website) ? website : website ? [website] : [];
+const instagrams = Array.isArray(instagram) ? instagram : instagram ? [instagram] : [];
+
+// Early return if there's nothing to show
+if (websites.length === 0 && !linkedin && instagrams.length === 0 && !tiktok && !youtube) {
+  return null;
+}
+---
+
+<div class={`profile-links color-${color}`}>
+  {websites.map((url, i) => (
+    <a href={url} target="_blank" rel="noopener noreferrer" aria-label={`Website ${i + 1}`}>
+      <i class="fas fa-globe" aria-hidden="true"></i>
+    </a>
+  ))}
+
+  {linkedin && (
+    <a href={linkedin} target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
+      <i class="fab fa-linkedin-in" aria-hidden="true"></i>
+    </a>
+  )}
+
+  {instagrams.map((url, i) => (
+    <a href={url} target="_blank" rel="noopener noreferrer" aria-label={`Instagram ${i + 1}`}>
+      <i class="fab fa-instagram" aria-hidden="true"></i>
+    </a>
+  ))}
+
+  {tiktok && (
+    <a href={tiktok} target="_blank" rel="noopener noreferrer" aria-label="TikTok">
+      <i class="fab fa-tiktok" aria-hidden="true"></i>
+    </a>
+  )}
+  {youtube && (
+    <a href={youtube} target="_blank" rel="noopener noreferrer" aria-label="YouTube">
+      <i class="fab fa-youtube" aria-hidden="true"></i>
+    </a>
+  )}
+</div>
+
+<style>
+  .profile-links {
+    display: flex;
+    gap: 0.75rem;
+    margin-top: 1rem;
+    padding-inline: 2.5rem;
+  }
+
+  .profile-links a i {
+    font-size: 1.25rem;
+    color: var(--text-color);
+    transition: transform 0.2s ease;
+  }
+
+  .profile-links a:hover i {
+    transform: scale(1.1);
+  }
+
+  .color-red a:hover i {
+    color: var(--color-red);
+  }
+
+  .color-yellow a:hover i {
+    color: var(--color-yellow);
+  }
+
+  .color-purple a:hover i {
+    color: var(--color-purple);
+  }
+
+  .color-green a:hover i {
+    color: var(--color-green);
+  }
+
+  .color-pink a:hover i {
+    color: var(--color-pink);
+  }
+
+  .color-blue a:hover i {
+    color: var(--color-blue);
+  }
+</style>

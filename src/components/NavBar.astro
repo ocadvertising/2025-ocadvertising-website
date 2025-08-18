@@ -1,0 +1,336 @@
+---
+// Navbar.astro
+import SearchBar from './SearchBar.astro';
+import ArchiveDropdown from './ArchiveDropdown.astro';
+
+export interface Props {}
+const archiveLinks = [
+  { label: "2023", url: "https://ocadvertising23.cargo.site/" },
+  { label: "2022", url: "https://ocadvertising2022.webflow.io/" },
+  { label: "2020", url: "https://ocadvertising.wixsite.com/ocadvertising2020" },
+  { label: "2019", url: "https://ocadvertising.wixsite.com/website-1" },
+  { label: "2018", url: "https://ocadvertising.wixsite.com/ocadvertising2020/2018" },
+  { label: "2017", url: "https://ocadvertising.wixsite.com/ocadvertising2017" },
+  { label: "2016", url: "https://ocadvertising.wixsite.com/ocadvertising2016" },
+  { label: "2015", url: "https://ocadvertising.wixsite.com/ocadvertising2015" },
+];
+const email = 'mailto:ocadvertisingstudents@gmail.com';
+const instagram = 'https://www.instagram.com/ocadvertising25/';
+---
+
+<style>
+  .nav {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    background: white;
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    padding: 1rem 2rem;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
+  }
+
+  .logo {
+    height: 10vh;
+    width: auto;
+    transition: height 0.7s ease;
+  }
+
+  .nav-left {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+  }
+
+  .nav-center {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .nav.scrolled .logo {
+    height: 6vh;
+  }
+
+  .nav-right {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 1.5rem;
+    position: relative;
+  }
+
+  .nav-links {
+    display: flex;
+    gap: 1.5rem;
+    align-items: center;
+  }
+
+  .nav-links a {
+    text-decoration: none;
+    color: black;
+    position: relative;
+    padding-bottom: 2px;
+    transition: color 0.2s ease;
+  }
+
+  .nav-links a::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    height: 1px;
+    background: black;
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.2s ease;
+  }
+
+  .nav-links a:hover {
+    color: #555;
+  }
+
+  .nav-links a:hover::after {
+    transform: scaleX(1);
+  }
+
+  .hamburger {
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    gap: 6px;
+    cursor: pointer;
+    z-index: 20;
+    width: 24px;
+    height: 24px;
+    position: relative;
+  }
+
+  .hamburger div {
+    height: 2px;
+    background: black;
+    border-radius: 1px;
+    transition: all 0.3s ease;
+    transform-origin: center;
+  }
+
+  .hamburger div:nth-child(1),
+  .hamburger div:nth-child(2) {
+    width: 100%;
+  }
+
+  .hamburger.open div:nth-child(1) {
+    transform: rotate(45deg) translateY(5px);
+  }
+
+  .hamburger.open div:nth-child(2) {
+    transform: rotate(-45deg) translateY(-5px);
+  }
+
+  .mobile-menu {
+    position: fixed;
+    top: 0;
+    right: -100%;
+    height: 100vh;
+    width: 200px;
+    background: white;
+    padding: 7rem 1.5rem 2rem;
+    display: flex;
+    flex-direction: column;  /* Ensure column layout */
+    gap: 1.5rem;
+    box-shadow: -2px 0 10px rgba(0, 0, 0, 0.1);
+    transition: right 0.3s ease;
+    z-index: 15;
+  }
+
+  .mobile-menu.open {
+    right: 0;
+  }
+
+  .mobile-links {
+    display: flex;
+    flex-direction: column;  /* Make the links stack in a column */
+    gap: 1.5rem;
+  }
+
+  .mobile-links a {
+    text-decoration: none;
+    color: black;
+    position: relative;
+    padding-bottom: 2px;
+    transition: color 0.2s ease;
+  }
+
+  .mobile-links a::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    height: 1px;
+    background: black;
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.2s ease;
+  }
+
+  .mobile-links a:hover {
+    color: #555;
+  }
+
+  .mobile-links a:hover::after {
+    transform: scaleX(1);
+  }
+
+  .mobile-archive-links {
+    display: none; /* Archive links are hidden initially */
+    opacity: 0;
+    transform: translateY(-20px);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    flex-direction: column; /* Stack archive links in a column */
+    gap: 1rem
+  }
+
+  .mobile-archive-links.open {
+    display: flex;
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  @media (max-width: 768px) {
+    .nav-links {
+      display: none;
+    }
+
+    .hamburger {
+      display: flex;
+    }
+  }
+</style>
+
+<div class="nav">
+  <div class="nav-left">
+    <SearchBar />
+  </div>
+
+  <div class="nav-center">
+    <a href="/" aria-label="home button">
+      <img src="/images/logo.svg" alt="Logo" class="logo" />
+    </a>
+  </div>
+
+  <div class="nav-right">
+    <div class="nav-links">
+      <ArchiveDropdown links={archiveLinks} />
+      <a href={email}>Email</a>
+      <a href={instagram}>Instagram</a>
+    </div>
+    <div class="hamburger" id="hamburger" onclick="window.toggleMobileMenu()">
+      <div></div>
+      <div></div>
+    </div>
+    <div class="mobile-menu" id="mobileMenu">
+      <div class="mobile-links">
+        <a href="javascript:void(0)" id="archiveToggle" onclick="window.toggleArchiveLinks()">Archives</a>
+        <div class="mobile-archive-links" id="archiveLinks">
+          {archiveLinks.map((link) => (
+            <a href={link.url} key={link.label} target="_blank" rel="noopener noreferrer">{link.label}</a>
+          ))}
+        </div>
+        <a href={email}>Email</a>
+        <a href={instagram}>Instagram</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  window.toggleArchiveLinks = function () {
+    const archiveLinks = document.getElementById("archiveLinks");
+    const archiveItems = archiveLinks.querySelectorAll('a'); // Select archive links
+    const archiveDropdown = document.getElementById("archiveDropdown"); // Select ArchiveDropdown
+    
+    // Toggle visibility of archive links
+    archiveLinks.classList.toggle("open");
+
+    // Update tabindex of archive links
+    archiveItems.forEach(link => {
+      if (archiveLinks.classList.contains("open")) {
+        link.removeAttribute("tabindex");  // Make links focusable
+      } else {
+        link.setAttribute("tabindex", "-1");  // Make links unfocusable
+      }
+    });
+
+    // Update tabindex of the ArchiveDropdown
+    if (archiveLinks.classList.contains("open")) {
+      archiveDropdown.removeAttribute("tabindex");  // Make dropdown focusable
+    } else {
+      archiveDropdown.setAttribute("tabindex", "-1");  // Make dropdown unfocusable
+    }
+  };
+
+  window.toggleMobileMenu = function () {
+    const menu = document.getElementById("mobileMenu");
+    const icon = document.getElementById("hamburger");
+    menu.classList.toggle("open");
+    icon.classList.toggle("open");
+  };
+
+  window.addEventListener("scroll", () => {
+    const nav = document.querySelector(".nav");
+    nav.classList.toggle("scrolled", window.scrollY > 10);
+  });
+
+  document.addEventListener("DOMContentLoaded", () => {
+    const mobileMenu = document.getElementById("mobileMenu");
+    const hamburger = document.getElementById("hamburger");
+    const archiveLinksContainer = document.getElementById("archiveLinks");
+    const archiveToggle = document.getElementById("archiveToggle");
+
+    document.addEventListener("click", (e) => {
+      const isClickInsideArchive =
+        archiveToggle.contains(e.target) || archiveLinksContainer.contains(e.target);
+      if (
+        archiveLinksContainer.classList.contains("open") &&
+        !isClickInsideArchive
+      ) {
+        archiveLinksContainer.classList.remove("open");
+      }
+
+      const isClickInsideMobile =
+        hamburger.contains(e.target) || mobileMenu.contains(e.target);
+      if (
+        mobileMenu.classList.contains("open") &&
+        !isClickInsideMobile
+      ) {
+        mobileMenu.classList.remove("open");
+        hamburger.classList.remove("open");
+        archiveLinksContainer.classList.remove("open");
+      }
+    });
+
+    mobileMenu?.querySelectorAll("a")?.forEach(link => {
+      if (link.id !== "archiveToggle") {
+        link.addEventListener("click", () => {
+          mobileMenu.classList.remove("open");
+          hamburger.classList.remove("open");
+          archiveLinksContainer.classList.remove("open");
+        });
+      }
+    });
+
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape") {
+        mobileMenu.classList.remove("open");
+        hamburger.classList.remove("open");
+        archiveLinksContainer.classList.remove("open");
+      }
+    });
+  });
+</script>

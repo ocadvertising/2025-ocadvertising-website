@@ -1,0 +1,19 @@
+---
+import BaseLayout from './BaseLayout.astro';
+import ProfileCard from '../components/ProfileCard.astro';
+
+const { content } = Astro.props;
+const slug = `${content.firstName.toLowerCase()}-${content.lastName.toLowerCase()}`;
+---
+
+<BaseLayout title={`${content.firstName} ${content.lastName} – Profile`}>
+  <main class="profile-layout-grid">
+    <section class="profile-content">
+      <slot/>
+    </section>
+
+    <div class="profile-sidebar">
+      <ProfileCard {...content} slug={slug} as="section" link={false} />
+    </div>
+  </main>
+</BaseLayout>

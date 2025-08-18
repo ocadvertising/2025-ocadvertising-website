@@ -1,0 +1,44 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import ProfileCard from '../components/ProfileCard.astro';
+
+const grads = (await getCollection('grads')).sort((a, b) =>
+  a.data.lastName.localeCompare(b.data.lastName)
+);
+---
+
+<BaseLayout title="Meet Our 2025 Grads">
+  
+  
+  <section slot="full-bleed" class="hero">
+    <div class="hero-wrapper wrapper">
+
+      <img src="/images/hero.webp" alt="" class="hero-img">
+      <div class="headline">
+        <div>Meet</div>
+        <div>Our</div>
+        <div>2025</div>
+        <div>Grads</div>
+      </div>
+    </div>
+  </section>
+    <section class="filter">
+      {[
+        "Creative Director", "Art Director", "Copywriter",
+        "Strategist", "Brand Designer", "Designer", "Artist"
+      ].map(role => (
+        <button type="button" data-role={role} onClick={`toggleFilter('${role}')`}>
+          {role}
+        </button>
+      ))}
+    </section>
+
+    <section class="profiles">
+      {grads.map(({ data, slug }) => (
+        <ProfileCard {...data} slug={slug} />
+
+))}
+    </section>
+  <script type="module" src="/scripts/filter.js"></script>
+</BaseLayout>
