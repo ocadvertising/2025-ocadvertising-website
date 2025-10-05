@@ -250,22 +250,25 @@ const instagram = 'https://www.instagram.com/ocadvertising25/';
 </div>
 
 <script>
+  
   window.toggleArchiveLinks = function () {
     const archiveLinks = document.getElementById("archiveLinks");
-    const archiveItems = archiveLinks.querySelectorAll('a'); // Select archive links
-    const archiveDropdown = document.getElementById("archiveDropdown"); // Select ArchiveDropdown
-    
-    // Toggle visibility of archive links
+    if (!archiveLinks) return; // stop if not found
+  
+    const archiveItems = archiveLinks.querySelectorAll('a');
+    if (!archiveItems.length) return; // stop if no links found
+  
     archiveLinks.classList.toggle("open");
-
-    // Update tabindex of archive links
+  
     archiveItems.forEach(link => {
+      if (!link) return; // safety guard
       if (archiveLinks.classList.contains("open")) {
-        link.removeAttribute("tabindex");  // Make links focusable
+        link.removeAttribute("tabindex");
       } else {
-        link.setAttribute("tabindex", "-1");  // Make links unfocusable
+        link.setAttribute("tabindex", "-1");
       }
     });
+  };
 
     // Update tabindex of the ArchiveDropdown
     if (archiveLinks.classList.contains("open")) {
