@@ -270,14 +270,6 @@ const instagram = 'https://www.instagram.com/ocadvertising25/';
     });
   };
 
-    // Update tabindex of the ArchiveDropdown
-    if (archiveLinks.classList.contains("open")) {
-      archiveDropdown.removeAttribute("tabindex");  // Make dropdown focusable
-    } else {
-      archiveDropdown.setAttribute("tabindex", "-1");  // Make dropdown unfocusable
-    }
-  };
-
   window.toggleMobileMenu = function () {
     const menu = document.getElementById("mobileMenu");
     const icon = document.getElementById("hamburger");
